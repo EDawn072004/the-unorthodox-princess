@@ -110,6 +110,9 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
         . . . . . . . . . . . . . . . . . . . . . . . . 
         `)
 })
+sprites.onDestroyed(SpriteKind.Enemy, function (sprite) {
+    info.changeScoreBy(1)
+})
 let Princess: Sprite = null
 scene.setBackgroundColor(13)
 scene.setBackgroundImage(img`
@@ -282,6 +285,7 @@ let rivals = sprites.create(img`
     `, SpriteKind.Enemy)
 rivals.setPosition(160, 60)
 forever(function () {
+    rivals.x += -1
     Princess.y = 60
 })
 forever(function () {
