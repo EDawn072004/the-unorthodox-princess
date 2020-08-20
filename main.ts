@@ -1,3 +1,6 @@
+controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    rivals.destroy()
+})
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     Princess.setImage(img`
         . . . . . . . . . . . . . . . . . . . . . . . . 
@@ -112,7 +115,31 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 sprites.onDestroyed(SpriteKind.Enemy, function (sprite) {
     info.changeScoreBy(1)
+    rivals = sprites.create(img`
+        . . . . . . 5 . 5 . . . . . . . 
+        . . . . . f 5 5 5 f . . . . . . 
+        . . . . f a 7 5 5 a f . . . . . 
+        . . . f a a a a 1 a a f . . . . 
+        . . . f a a a a a 1 a f . . . . 
+        . . . f d f d a a a 1 f . . . . 
+        . . . f d f d a a a a f f . . . 
+        . . . f d 3 d d a a a f a f . . 
+        . . . . f d d d f f a f f . . . 
+        . . . . . f f 7 7 f a a a f . . 
+        . . . . f 7 7 7 f f f f f . . . 
+        . . . . f 7 7 f d f . . . . . . 
+        . . . . . f 7 f d f . . . . . . 
+        . . . . f 7 7 7 f d f . . . . . 
+        . . . . f f 7 7 f f . . . . . . 
+        . . . . . . f f f . . . . . . . 
+        `, SpriteKind.Enemy)
+    rivals.setPosition(160, 60)
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
+    Princess.destroy()
+    game.over(false)
+})
+let rivals: Sprite = null
 let Princess: Sprite = null
 scene.setBackgroundColor(13)
 scene.setBackgroundImage(img`
@@ -265,7 +292,7 @@ Princess = sprites.create(img`
     `, SpriteKind.Player)
 controller.moveSprite(Princess, 100, 100)
 Princess.setFlag(SpriteFlag.StayInScreen, true)
-let rivals = sprites.create(img`
+rivals = sprites.create(img`
     . . . . . . 5 . 5 . . . . . . . 
     . . . . . f 5 5 5 f . . . . . . 
     . . . . f a 7 5 5 a f . . . . . 
@@ -285,9 +312,8 @@ let rivals = sprites.create(img`
     `, SpriteKind.Enemy)
 rivals.setPosition(160, 60)
 forever(function () {
-    rivals.x += -1
-    Princess.y = 60
+    music.playMelody("C5 G B E F A C5 B ", 120)
 })
 forever(function () {
-    music.playMelody("C5 G B E F A C5 B ", 120)
+    rivals.follow(Princess, 30)
 })
